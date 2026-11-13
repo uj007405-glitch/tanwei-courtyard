@@ -6,8 +6,8 @@
 <meta name="description" content="老房子怎么改才暖和？选几下就知道大概花多少钱、能暖和多少、要不要报批。洛阳老城住宅改造费用估算。">
 <title>碳为观止 · 老房子改造算一算</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%232f6b4f'/%3E%3Cpath d='M8 20 20 10 32 20M12 18v13h16V18M18 31v-9h5v9' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="v1.css">
-<script type="module" src="v1.js"></script>
+<link rel="stylesheet" href="v1.css?v=20261113c">
+<script type="module" src="v1.js?v=20261113c"></script>
 </head>
 <body>
 
@@ -107,6 +107,25 @@
         <a class="btn line" href="#cases">看看别人家怎么改的</a>
       </div>
       <p class="mini">以上为估算。实际数量、材料与价格以师傅上门丈量后为准。</p>
+    </div>
+  </section>
+
+  <section class="models wrap" id="models">
+    <h2>转着看看这些院子</h2>
+    <p class="lead">14 户调研住宅的三维模型。按住拖动可旋转，双指或滚轮缩放。看的是空间和体量，墙上没有材质贴图。</p>
+
+    <div class="viewer-box">
+      <div class="viewer-stage" id="stage">
+        <div class="viewer-hint" id="viewerHint">正在载入三维模型…</div>
+      </div>
+      <div class="viewer-bar">
+        <div class="chips-row" id="house-chips" role="group" aria-label="选择住宅"></div>
+        <div class="viewer-acts">
+          <button class="btn line small" id="btn-spin">自动旋转</button>
+          <button class="btn line small" id="btn-reset">复原视角</button>
+        </div>
+      </div>
+      <p class="viewer-note" id="viewerNote"></p>
     </div>
   </section>
 

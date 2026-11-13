@@ -1,5 +1,5 @@
-import { buildingTypes, facadeZones, layouts, wallOptions, windowOptions, roofOptions, baseline, ratios, defaults } from './v1-data.js';
-import { cases } from './cases.js';
+import { buildingTypes, facadeZones, layouts, wallOptions, windowOptions, roofOptions, baseline, ratios, defaults, houseModels } from './v1-data.js?v=20261113b';
+import { cases } from './cases.js?v=20261113b';
 import { caseMedia } from './case-media.js';
 
 const $ = (s) => document.querySelector(s);
@@ -216,6 +216,21 @@ document.addEventListener('click', (e) => {
   if (b.dataset.window) { state.windowId = b.dataset.window; refresh(); return; }
   if (b.dataset.roof) { if (b.classList.contains('off')) return; state.roofId = b.dataset.roof; refresh(); return; }
   if (b.dataset.case) { openCase(b.dataset.case); return; }
+  if (b.dataset.house) { showHouse(b.dataset.house); return; }
+  if (b.id === 'btn-spin') {
+    if (!mvEl) return;
+    const on = mvEl.hasAttribute('auto-rotate');
+    if (on) mvEl.removeAttribute('auto-rotate'); else mvEl.setAttribute('auto-rotate', '');
+    b.classList.toggle('on', !on);
+    b.textContent = on ? '自动旋转' : '停下旋转';
+    return;
+  }
+  if (b.id === 'btn-reset') {
+    if (!mvEl) return;
+    mvEl.removeAttribute('camera-target');
+    mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
+    return;
+  }
   if (b.hasAttribute('data-close')) { $('#dlg').close(); return; }
   if (b.id === 'print') { window.print(); return; }
   if (b.id === 'csv') { exportCsv(); return; }
@@ -259,6 +274,76 @@ function exportCsv() {
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
+
+
+/* ---------- 三维模型 ---------- */
+let mvEl = null, mvScriptLoaded = false, currentHouse = null;
+
+function renderHouseChips() {
+  $('#house-chips').innerHTML = houseModels.map((h) => `
+    <button class="chip-btn ${currentHouse === h.code ? 'on' : ''}" data-house="${h.code}">${h.name}</button>`).join('');
+}
+
+function ensureMVScript(done) {
+  if (mvScriptLoaded) { done(); return; }
+  const s = document.createElement('script');
+  s.type = 'module';
+  s.src = 'assets/lib/model-viewer.min.js';
+  s.onload = () => { mvScriptLoaded = true; done(); };
+  s.onerror = () => { $('#viewerHint').textContent = '三维组件没加载出来，刷新一次试试'; };
+  document.head.appendChild(s);
+}
+
+function buildViewer() {
+  if (mvEl) return;
+  mvEl = document.createElement('model-viewer');
+  mvEl.setAttribute('camera-controls', '');
+  mvEl.setAttribute('touch-action', 'pan-y');
+  mvEl.setAttribute('shadow-intensity', '1');
+  mvEl.setAttribute('shadow-softness', '1');
+  mvEl.setAttribute('environment-image', 'neutral');
+  mvEl.setAttribute('exposure', '0.95');
+  mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
+  mvEl.setAttribute('interaction-prompt', 'none');
+  mvEl.addEventListener('load', () => { const h = $('#viewerHint'); if (h) h.style.display = 'none'; });
+  mvEl.addEventListener('error', () => {
+    const h = $('#viewerHint');
+    if (h) { h.style.display = 'grid'; h.textContent = '这个模型没加载出来，换一个看看'; }
+  });
+  $('#stage').appendChild(mvEl);
+}
+
+function showHouse(code) {
+  const h = houseModels.find((x) => x.code === code) || houseModels[0];
+  currentHouse = h.code;
+  renderHouseChips();
+  $('#viewerNote').textContent = h.note ? `${h.name}（${h.note}）· 模型由 SketchUp 文件导出` : `${h.name} · 模型由 SketchUp 文件导出`;
+  const hint = $('#viewerHint');
+  hint.style.display = 'grid';
+  hint.textContent = '正在载入' + h.name + '…';
+  ensureMVScript(() => {
+    buildViewer();
+    mvEl.removeAttribute('auto-rotate');
+    $('#btn-spin').classList.remove('on');
+    mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
+    mvEl.setAttribute('src', `assets/models/${h.code}.glb`);
+  });
+}
+
+function initViewer() {
+  renderHouseChips();
+  const section = document.getElementById('models');
+  if (!section) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting && !currentHouse) { showHouse('h11'); io.disconnect(); }
+    });
+  }, { rootMargin: '200px' });
+  io.observe(section);
+}
+
+/* ---------- 启动 ---------- */
 refresh();
 renderCases();
 renderMoney();
+initViewer();

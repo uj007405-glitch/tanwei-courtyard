@@ -216,3 +216,28 @@ dialog::backdrop{background:rgba(20,28,23,.45)}
   .card{box-shadow:none;padding:0}
   .step-skips{display:none}
 }
+
+/* ---- 三维模型 ---- */
+.models{padding:44px 0}
+.models h2{font-size:24px;text-align:center}
+.models .lead{text-align:center;color:var(--sub);font-size:15px;margin-top:8px}
+.viewer-box{margin-top:20px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:14px}
+.viewer-stage{position:relative;height:460px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#e4e9df 0%,#d6ddd0 100%)}
+.viewer-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
+.viewer-stage model-viewer::part(default-interaction-prompt){display:none}
+.viewer-stage model-viewer::part(default-progress-bar){background-color:#d9e2d3}
+.viewer-hint{position:absolute;inset:0;display:grid;place-items:center;font-size:14px;color:#7d8b7d;pointer-events:none}
+.viewer-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+.chips-row{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.chip-btn{font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);color:#4c5c50;background:#fff;transition:.15s}
+.chip-btn:hover{border-color:#b9cdb6}
+.chip-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.viewer-acts{display:flex;gap:8px}
+.btn.small{height:38px;font-size:13.5px;padding:0 14px}
+.viewer-note{font-size:12.5px;color:#96a096;margin-top:10px;line-height:1.8}
+@media(max-width:640px){
+  .viewer-stage{height:340px}
+  .chips-row{gap:6px}
+  .chip-btn{font-size:13px;padding:7px 11px}
+  .viewer-acts{width:100%;justify-content:flex-end}
+}

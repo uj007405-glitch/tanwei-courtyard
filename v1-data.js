@@ -71,5 +71,23 @@ export const roofOptions = [
 ];
 
 export const baseline = { wall: 1.5, window: 4.5, roof: 1.2 };
+
+// 14 户调研住宅的三维模型（由 SketchUp 文件导出并压缩，仅看空间关系，不含装修材质）
+export const houseModels = [
+
+  { code: 'h02', name: '2 号房', note: '含周边环境' },
+  { code: 'h03', name: '3 号房', note: '含周边环境' },
+  { code: 'h04', name: '4 号房', note: '' },
+  { code: 'h05', name: '5 号房', note: '' },
+  { code: 'h06', name: '6 号房', note: '' },
+  { code: 'h07', name: '7 号房', note: '' },
+  { code: 'h08', name: '8 号房', note: '含周边环境' },
+  { code: 'h09', name: '9 号房', note: '' },
+  { code: 'h10', name: '10 号房', note: '含周边环境' },
+  { code: 'h11', name: '11 号房', note: '' },
+  { code: 'h12', name: '12 号房', note: '' },
+  { code: 'h13', name: '13 号房', note: '' },
+  { code: 'h14', name: '14 号房', note: '含四种院落对比' }
+];
 export const ratios = { wall: 0.85, window: 0.15, roofPerFloor: 0.9, contingency: 0.12 };
 export const defaults = { area: 120, floors: 2, typeId: 'vernacular', zoneId: 'f2', layoutId: 'court', wallId: 'outer-eps', windowId: 'w2lowe', roofId: 'roof-slope' };
