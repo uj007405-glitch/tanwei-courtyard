@@ -137,7 +137,7 @@ function renderResult() {
   bullets.push(t.id === 'heritage' || t.id === 'historic'
     ? '外墙和屋顶不能动，钱主要花在换窗户和屋里加保温上。这两项做完，冬天屋里明显不一样。'
     : `${r.outerChanged ? '这次会动外观' : '这次不动外观'}，${r.outerChanged ? '施工前先去街道或主管部门问清楚要不要报批。' : '邻居基本看不出来，阻力小。'}`);
-  bullets.push(`保暖提升约 ${Math.round(r.drop)}%，体感上就是冬天屋里没那么阴冷、夏天顶层没那么闷。取暖费一般能省两三成，具体看你怎么用。`);
+  bullets.push(`保暖提升约 ${Math.round(r.drop)}%：冬天屋里没那么阴冷，夏天顶层没那么闷。取暖费一般能省两三成。`);
   bullets.push(`工期合计约 ${r.days} 天，可以分开做：先换窗，再做屋顶，最后做外墙，中间不影响住人。`);
   $('#clist').innerHTML = bullets.map((b) => `<li>${b}</li>`).join('');
 
