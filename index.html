@@ -2,208 +2,172 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#2c5a45">
-<meta name="description" content="碳为观止：按建筑类型与风貌管控要求，逐项选择低碳改造做法，估算造价。洛阳老城既有住宅改造选配平台。">
-<title>碳为观止</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%232c5a45'/%3E%3Cpath d='M8 20 20 10 32 20M12 18v13h16V18M18 31v-9h5v9' fill='none' stroke='%23f6f4e6' stroke-width='2'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#2f6b4f">
+<meta name="description" content="老房子怎么改才暖和？选几下就知道大概花多少钱、能暖和多少、要不要报批。洛阳老城住宅改造费用估算。">
+<title>碳为观止 · 老房子改造算一算</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%232f6b4f'/%3E%3Cpath d='M8 20 20 10 32 20M12 18v13h16V18M18 31v-9h5v9' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="v1.css">
 <script type="module" src="v1.js"></script>
 </head>
 <body>
-<header class="site-header">
-  <a class="brand" href="#top" aria-label="碳为观止首页">
-    <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></span>
-    <span><b>碳为观止</b><small>洛阳老城住宅低碳改造选配</small></span>
-  </a>
-  <nav aria-label="主导航">
-    <a href="#step1" class="on">开始选配</a>
-    <a href="#cases">建成案例</a>
-    <a href="#materials">材料库</a>
-    <a href="#basis">依据与说明</a>
-  </nav>
-</header>
+
+<div class="bar">
+  <div class="bar-in">
+    <a class="logo" href="#top">
+      <span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/></svg></span>
+      <b>碳为观止</b>
+    </a>
+    <nav aria-label="主导航">
+      <a href="#step1">算要花多少钱</a>
+      <a href="#cases">别人家怎么改</a>
+      <a href="#money">每项多少钱</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="cta" href="#step1">现在开始算</a>
+  </div>
+</div>
 
 <main id="top">
   <section class="hero wrap">
-    <h1>先定管控，再选做法，最后算钱</h1>
-    <p>选建筑类型确定可改的范围，选空间布局看体形与通风采光，再逐项选定外墙、外窗、屋面的做法，页面即时给出造价估算与结论。适合老城居民先做个大概判断，也便于评审时逐条核对。</p>
-    <div class="meta">
-      <span class="pill">建筑类型四级 · 风貌管控两级</span>
-      <span class="pill">外墙 / 外窗 / 屋面 三大部位</span>
-      <span class="pill">1.0 演示版，数据为参考值</span>
-    </div>
-    <div class="steps">
-      <div><b>1</b>选建筑类型与风貌区位</div><i>→</i>
-      <div><b>2</b>选空间布局</div><i>→</i>
-      <div><b>3</b>分部位选做法</div><i>→</i>
-      <div><b>4</b>看造价与结论</div>
+    <span class="badge">洛阳老城 · 免费估算</span>
+    <h1>老房子怎么改，<br>先算清<em>三件事</em></h1>
+    <p>要花多少钱、能暖和多少、要不要报批。点几下就有结果，不用懂建筑，也不用填手机号。</p>
+    <a class="btn main" href="#step1">现在开始算 →</a>
+    <div class="notes">约 1 分钟 · 结果能打印带走 · 数字是我们按常见做法估的，不是施工报价</div>
+
+    <div class="trio">
+      <div><span class="n">1</span><div><b>第一步：说清你家是哪种房</b><small>受保护的老宅，还是普通老院，能改的地方不一样</small></div></div>
+      <div><span class="n">2</span><div><b>第二步：挑个院子形状</b><small>一排房、拐个弯、三面围合，还是四面合院</small></div></div>
+      <div><span class="n">3</span><div><b>第三步：选出钱的地方</b><small>外墙、窗户、屋顶，三处想改哪几处</small></div></div>
     </div>
   </section>
 
-  <section class="section wrap" id="step1">
-    <div class="head">
-      <div>
-        <h2>第一步：建筑类型与风貌区位</h2>
-        <p class="sub">类型决定能做哪些改造；区位决定层高、立面与材料的管控强度。</p>
-      </div>
-      <p class="aside" id="zone-warn" style="color:#a8642f"></p>
-    </div>
-    <div class="grid c4" id="type-grid"></div>
-    <div class="grid c3" id="zone-grid" style="margin-top:12px"></div>
+  <section class="step wrap" id="step1">
+    <div class="step-head"><span class="step-no">1</span><h2>你家是哪种房子？<small>不确定就挑最像的，后面还能改</small></h2></div>
+    <p class="lead">这一步决定你能动到哪一步：有的房子外面一点都不能改，有的随便改。</p>
+    <div class="opts" id="types"></div>
+
+    <h3 style="font-size:18px;margin:30px 0 4px">门口是不是主街？<span style="font-size:14px;color:#7b877c;font-weight:400"> 管得松紧不一样</span></h3>
+    <p class="lead">临着东大街这类主街，管得最严；在后面的巷子里，宽松一些。</p>
+    <div class="opts four" id="zones"></div>
+    <div class="tip">⚠️ 拿不准就选「在主街后面的巷子里」，最后去街道问一句最靠谱。</div>
   </section>
 
-  <section class="section wrap" id="step2">
-    <div class="head">
-      <div>
-        <h2>第二步：空间布局</h2>
-        <p class="sub">布局影响冬季失热、院内通风与采光。同一套做法放在不同布局里，效果并不一样。</p>
-      </div>
-      <p class="aside">体型系数为外表面面积与体积之比，数值越小，单位面积散热越少；通风与采光为 5 分制示意评分。</p>
-    </div>
-    <div class="grid c4" id="layout-grid"></div>
+  <section class="step wrap" id="step2">
+    <div class="step-head"><span class="step-no">2</span><h2>你家院子是什么形状？</h2></div>
+    <p class="lead">抬头看看房子怎么围起来的，挑最像的那个。形状不同，冬天的暖和程度差不少。</p>
+    <div class="opts four" id="layouts"></div>
   </section>
 
-  <section class="section wrap" id="step3">
-    <div class="head">
-      <div>
-        <h2>第三步：分部位选做法</h2>
-        <p class="sub">外墙看保温形式与材料，外窗看玻璃配置，屋面看构造形式。不能选的做法会置灰并写明原因。</p>
+  <section class="step wrap" id="step3">
+    <div class="step-head"><span class="step-no">3</span><h2>钱花在哪三处？</h2></div>
+    <p class="lead">外墙、窗户、屋顶。预算紧就先做一处，结果会跟着变。</p>
+
+    <h3 style="font-size:18px;margin:18px 0 10px">① 外墙：给墙加一层「棉被」</h3>
+    <div class="opts" id="walls"></div>
+
+    <h3 style="font-size:18px;margin:26px 0 4px">② 窗户：换掉漏风的旧窗</h3>
+    <p class="lead" id="types-note" style="margin:0 0 10px 0"></p>
+    <div class="opts four" id="windows"></div>
+
+    <h3 style="font-size:18px;margin:26px 0 10px">③ 屋顶：顶上或屋里加保温</h3>
+    <div class="opts four" id="roofs"></div>
+
+    <div class="nums">
+      <div class="num">
+        <label for="area">你家大概多少平米？</label>
+        <input id="area" type="number" min="20" max="2000" step="5" value="120" inputmode="numeric">
+        <small>按能住人的面积填，大概数就行</small>
       </div>
-      <p class="aside">单价为含材料与常规人工的参考值，用于估算，不等于施工报价；正式设计需现场核价。</p>
-    </div>
-
-    <h3 style="font-size:16px;font-weight:600;margin:6px 0 10px">外墙保温</h3>
-    <div class="grid c3" id="wall-grid"></div>
-
-    <h3 style="font-size:16px;font-weight:600;margin:24px 0 6px">外窗玻璃</h3>
-    <p class="sub" id="window-note" style="margin-bottom:10px"></p>
-    <div class="grid c3" id="window-grid"></div>
-
-    <h3 style="font-size:16px;font-weight:600;margin:24px 0 10px">屋面</h3>
-    <div class="grid c3" id="roof-grid"></div>
-
-    <div class="params">
-      <div class="field">
-        <label for="area">建筑面积（㎡）</label>
-        <input id="area" type="number" min="20" max="2000" step="5" value="120">
-        <p class="hint">按户内建筑面积填写，用于估算工程量。</p>
-      </div>
-      <div class="field">
-        <label for="floors">地上层数</label>
-        <input id="floors" type="number" min="1" max="4" step="1" value="2">
-        <p class="hint">老城院落住宅多为 1–2 层，风貌管控要求维持 2–3 层。</p>
-      </div>
-      <div class="field">
-        <label>工程量为估算值</label>
-        <p class="hint">外墙按建筑面积的 85%、外窗按 15%、屋面按每层的 90% 折算。实际数量以现场丈量为准。</p>
+      <div class="num">
+        <label for="floors">几层？</label>
+        <input id="floors" type="number" min="1" max="4" step="1" value="2" inputmode="numeric">
+        <small>老院子多数是 1–2 层</small>
       </div>
     </div>
   </section>
 
-  <section class="section wrap" id="result">
-    <div class="head">
-      <div>
-        <h2>造价估算与结论</h2>
-        <p class="sub" id="param-line"></p>
-      </div>
-    </div>
-    <div class="result">
-      <div class="top">
+  <section class="result-wrap wrap" id="result">
+    <div class="card">
+      <div class="total-line">
         <div>
-          <div class="total"><span id="sum-total">—</span><small>万元</small></div>
-          <div class="per" id="sum-per"></div>
+          <div class="label">你家这样改，大概要花</div>
+          <div class="total"><span id="total">—</span><span>万元</span></div>
+          <div class="per" id="per"></div>
         </div>
-        <div class="actions">
-          <button class="btn primary" id="do-print">打印 / 存为 PDF</button>
-          <button class="btn ghost" id="do-csv">导出估算表 CSV</button>
-        </div>
+        <button class="btn line" id="print">打印这张单子</button>
       </div>
-      <table class="cost">
-        <thead><tr><th>部位</th><th>做法</th><th class="num">工程量</th><th class="num">单价</th><th class="num">金额</th></tr></thead>
-        <tbody id="cost-body"></tbody>
-        <tfoot id="cost-foot"></tfoot>
-      </table>
-      <div class="conclusion" id="conclusion"></div>
+      <div class="chips" id="chips"></div>
+      <div class="rows" id="rows"></div>
+      <div class="concl">
+        <h4>这份结果说明什么</h4>
+        <ul id="clist"></ul>
+      </div>
+      <div class="acts">
+        <button class="btn main" id="csv">导出表格</button>
+        <a class="btn line" href="#cases">看看别人家怎么改的</a>
+      </div>
+      <p class="mini">数字怎么来的：按常见做法乘以参考单价，外墙按面积 85%、窗户按 15%、屋顶按每层 90% 折算，再留 12% 应付临时加项。真实施工要师傅上门量过才算得准。</p>
     </div>
   </section>
 
-  <section class="section wrap" id="cases">
-    <div class="head">
-      <div>
-        <h2>建成案例</h2>
-        <p class="sub">河南省内已建成项目，看实际做了什么、限制在哪里。案例为外部公开资料，不是本平台的实测数据。</p>
-      </div>
-      <p class="aside">图片与资料来自谷德设计网刊载的设计方介绍，版权归原作者。</p>
-    </div>
-    <div class="case-grid" id="case-grid"></div>
+  <section class="case-section wrap" id="cases">
+    <h2>别人家怎么改的</h2>
+    <p class="lead">河南已经改完的院子。点开能看实景、图纸，也能看到哪些做法不适合照搬。</p>
+    <div class="cases" id="cases-grid"></div>
 
-    <div class="case-more">
-      <h3>更多参考案例</h3>
-      <p>河南以外的项目与名单，用于对照做法、查资料；未参与本平台的任何计算。</p>
+    <div class="more">
+      <h3>外省还有这些可以参考</h3>
+      <p>下面的项目不在河南，做法可以看看，数据不能直接套到你家。</p>
       <ul>
-        <li><a href="https://www.gooood.cn/shiyuan-by-days-in-yard-workshop.htm" target="_blank" rel="noopener noreferrer"><strong>拾院 · 北京沙滩北街三号院</strong><span>2021 年改造，古建与被动房结合，实测约 40 kWh/(㎡·年)，热回收率＞75%</span><em>gooood.cn ↗</em></a></li>
-        <li><a href="https://www.gooood.cn/shougang-three-blast-furnace-museum-china-by-cctn-design.htm" target="_blank" rel="noopener noreferrer"><strong>首钢三高炉博物馆 · 北京</strong><span>2020 年，停产高炉改博物馆，老结构再利用，72 米高空步道串联遗存</span><em>gooood.cn ↗</em></a></li>
-        <li><a href="https://www.shgbc.org/xiangmujijin/202608101202125498.html" target="_blank" rel="noopener noreferrer"><strong>新黄浦大厦 · 上海黄浦</strong><span>2023–2025 年，外滩 30 年老写字楼改造：三玻两腔 Low-E 窗、结构加固、智慧运维</span><em>shgbc.org ↗</em></a></li>
-        <li><a href="https://www.shgbc.org/xiangmujijin/202607221350017826.html" target="_blank" rel="noopener noreferrer"><strong>佰舍 LITE · 上海杨浦</strong><span>2025–2026 年，闲置商业改公寓：外墙保温、高性能门窗、变频多联机、能耗监测</span><em>shgbc.org ↗</em></a></li>
-        <li><a href="https://www.shgbc.org/uploads/202506/03/250603042657777.pdf" target="_blank" rel="noopener noreferrer"><strong>2024 年度上海市既有建筑绿色低碳更新改造评定名单</strong><span>PDF，按奖项列出的项目清单，可按建筑类型找同类做法</span><em>shgbc.org ↗</em></a></li>
-        <li><a href="https://m.thepaper.cn/newsDetail_forward_28490948" target="_blank" rel="noopener noreferrer"><strong>大行宫老城区微更新 · 南京秦淮</strong><span>2024 年，两栋六层老居民楼转商业公共空间：打开围墙、加建阳光板</span><em>thepaper.cn ↗</em></a></li>
-        <li><a href="https://www.gooood.cn/gooood-archive-urban-micro-regeneration-2022-2026.htm" target="_blank" rel="noopener noreferrer"><strong>城市针灸微更新合集（2022–2026）</strong><span>30 个老旧小区与边角空间更新案例，适合看小尺度怎么下手</span><em>gooood.cn ↗</em></a></li>
-        <li><a href="https://www.gooood.cn/archive-for-summer-climate-adaptability-strategies-in-residential-buildings.htm" target="_blank" rel="noopener noreferrer"><strong>住宅建筑中的气候适应性策略</strong><span>20 个项目，看遮阳、通风与围护做法如何按气候区调整</span><em>gooood.cn ↗</em></a></li>
+        <li><a href="https://www.gooood.cn/shiyuan-by-days-in-yard-workshop.htm" target="_blank" rel="noopener noreferrer">北京 · 拾院<span>老四合院改造成冬暖夏凉，实测每年每平米约 40 度电</span></a></li>
+        <li><a href="https://www.gooood.cn/shougang-three-blast-furnace-museum-china-by-cctn-design.htm" target="_blank" rel="noopener noreferrer">北京 · 首钢三高炉博物馆<span>废弃高炉改成展览馆，老结构留下来接着用</span></a></li>
+        <li><a href="https://www.shgbc.org/xiangmujijin/202608101202125498.html" target="_blank" rel="noopener noreferrer">上海 · 新黄浦大厦<span>外滩三十年老写字楼：换窗、加固、加智能管理</span></a></li>
+        <li><a href="https://www.shgbc.org/xiangmujijin/202607221350017826.html" target="_blank" rel="noopener noreferrer">上海 · 佰舍 LITE<span>闲置商场改成公寓：外墙保温、换窗、变频空调</span></a></li>
+        <li><a href="https://www.shgbc.org/uploads/202506/03/250603042657777.pdf" target="_blank" rel="noopener noreferrer">上海 · 2024 年度改造获奖名单<span>一整个名单，能按房子类型找相似案例</span></a></li>
+        <li><a href="https://m.thepaper.cn/newsDetail_forward_28490948" target="_blank" rel="noopener noreferrer">南京 · 大行宫老城区<span>两栋老居民楼改成商铺：拆围墙、加玻璃顶</span></a></li>
+        <li><a href="https://www.gooood.cn/gooood-archive-urban-micro-regeneration-2022-2026.htm" target="_blank" rel="noopener noreferrer">合集 · 城市微更新 30 例<span>小打小闹怎么改，适合预算不多的情况</span></a></li>
+        <li><a href="https://www.gooood.cn/archive-for-summer-climate-adaptability-strategies-in-residential-buildings.htm" target="_blank" rel="noopener noreferrer">合集 · 住宅如何应对气候<span>20 个房子，看遮阳、通风、保温怎么配合</span></a></li>
       </ul>
     </div>
   </section>
 
-  <section class="section wrap" id="materials">
-    <div class="head">
-      <div>
-        <h2>材料库</h2>
-        <p class="sub">选型时可对照的单价、防火等级、使用年限与传热系数。</p>
-      </div>
-      <p class="aside">单价为参考值；防火等级按材料类别标示；年限为常规维护条件下的经验值。</p>
+  <section class="money wrap" id="money">
+    <h2>想仔细看看：每一项多少钱</h2>
+    <p class="lead">上面选的做法，都在这里列了价格、保暖星级和能用多久。价格是含人工的参考值。</p>
+    <div class="mtable">
+      <table>
+        <thead><tr><th>部位</th><th>做法</th><th>每平米</th><th>保暖</th><th>能用</th></tr></thead>
+        <tbody id="money-body"></tbody>
+      </table>
     </div>
-    <table class="mat-table">
-      <thead><tr><th>部位</th><th>形式</th><th>材料 / 构造</th><th class="num">单价 元/㎡</th><th>防火</th><th>年限</th><th class="num">K 值</th></tr></thead>
-      <tbody id="mat-body"></tbody>
-    </table>
   </section>
 
-  <section class="section wrap" id="basis">
-    <div class="head">
-      <div>
-        <h2>依据与说明</h2>
-        <p class="sub">数据怎么来的、算到什么程度、哪些必须现场确认。</p>
-      </div>
-    </div>
-    <div class="basis-grid">
-      <article>
-        <h3>分级与管控</h3>
-        <p>建筑类型按文物建筑、历史建筑、风貌建筑、现代建筑划分，管控底线取自老城保护与风貌管理的通行做法：文物与历史建筑不动外观，只做内保温与屋面内嵌保温；风貌建筑允许改造外观但需与街区协调；现代建筑按现行节能标准执行。</p>
-        <p>风貌区位分两级：核心沿街管控层高、立面与材料；非核心沿街维持 2–3 层，材料较自由。具体项目以主管部门批复为准。</p>
-      </article>
-      <article>
-        <h3>造价怎么算</h3>
-        <p>按外墙、外窗、屋面三部分的工程量乘以参考单价，另计 12% 不可预见费。工程量用固定比例折算，未逐一丈量。</p>
-        <p>单价为含材料与常规人工的参考区间取值，不含脚手架、垃圾清运、结构加固、设计与管理费用。正式报价需按分项清单询价。</p>
-      </article>
-      <article>
-        <h3>能效说明</h3>
-        <p>页面给出的是围护结构平均传热系数的变化，用的是常见构造的经验取值，不是能耗模拟结果。实际节能效果还取决于供暖方式、使用习惯、气密性与遮阳。</p>
-        <p>因此本页不给出碳减排吨数。需要碳数据时，应以本户能耗账单或专业能耗模拟为准。</p>
-      </article>
-      <article>
-        <h3>图片与案例</h3>
-        <p>案例区的照片与图纸来自谷德设计网刊载的设计方介绍，版权归原作者，仅作做法参考，不代表本平台实测。</p>
-        <p>页面中的改造后效果图为示意，用于说明空间与材料变化，不是任何一户的建成实景。</p>
-      </article>
+  <section class="faq wrap" id="faq">
+    <h2>常见问题</h2>
+    <div class="list">
+      <details open><summary>这个价格准吗？</summary><p>价格是我们按常见做法和材料询价区间估的，含人工，不含搭架子、清运垃圾和结构加固。真实施工要师傅上门量尺寸、看墙体情况才报得准，一般会有 10%–30% 的出入。拿着这张单子去问价，至少知道哪些项在做、哪些不该乱加。</p></details>
+      <details><summary>我家能不能改外墙？</summary><p>看房子类型。受保护的老宅和有年头的老房子，外墙外观不能动，只能在屋里加保温；老城里的普通老院和后来盖的房子，外墙里外都能做。临着东大街这类主街的，还要报批，颜色和材料要跟街区协调。</p></details>
+      <details><summary>一定要三处全做吗？</summary><p>不用。预算紧就先换窗户，花钱少、见效快，一天就能换完；屋顶漏水的话优先修屋顶，顺便加保温最划算；外墙花钱最多，可以缓一步。上面的结果会跟着你的选择变。</p></details>
+      <details><summary>会不会做完被要求拆掉？</summary><p>在核心沿街动了外墙颜色、加了外保温、换了屋顶瓦，有可能被要求整改。稳妥的做法：先拿这张单子去街道或主管部门问一句要不要报批，再找师傅。选「外观基本不变」的方案，风险最小。</p></details>
+      <details><summary>为什么不告诉我能省多少碳？</summary><p>因为那要按你家实际用电、供暖方式和房屋情况算，光靠几个选项算不准。这里只给「保暖提升约百分之多少」这个能靠谱说明的指标。想要碳排放数据，得看自家的电费气费单，或者请人做能耗测算。</p></details>
+      <details><summary>屋里加保温，会不会让屋子变小、还返潮？</summary><p>会占一点地方，3 厘米左右，屋里每面墙薄这么多。返潮主要看施工做没做防潮隔汽，做对了没问题，做错了墙角容易发霉。所以内保温要盯住「防潮层」这一项，别省。</p></details>
     </div>
   </section>
 </main>
 
 <footer class="wrap">
-  <span>碳为观止 · 洛阳老城住宅低碳改造选配平台（1.0 演示版）</span>
-  <span>数据为参考值，改造前请以现场勘查与主管部门要求为准</span>
+  <span>碳为观止 · 洛阳老城住宅改造费用估算</span>
+  <span>数字为参考估算，改造前请以现场勘查和主管部门要求为准</span>
 </footer>
 
-<dialog id="case-dialog"><div id="case-dialog-body"></div></dialog>
+<div class="dock">
+  <div class="dock-in">
+    <div class="s"><span id="dockTip"></span><br>合计约 <b id="dockTotal">—</b> 万元</div>
+    <button class="btn main" id="goResult">看结果</button>
+  </div>
+</div>
+
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
 </body>
 </html>
