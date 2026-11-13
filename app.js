@@ -1,4 +1,5 @@
-import {plans,profiles,measures,normalizeWeights,rankPlans,scenarioRanks,estimateEconomics} from './model.js';
+import {plans,profiles,measures,materials,normalizeWeights,rankPlans,scenarioRanks,estimateEconomics} from './model.js';
+import {cases,caseFilters} from './cases.js';
 
 const icons={
   home:'<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/>',
@@ -63,6 +64,62 @@ const percent=n=>Math.round(n*100);
 function scored(){return rankPlans(settings);}
 function findScored(id){return scored().find(p=>p.id===id);}
 
+/* ---------- 居民视角：第一页四问、生活场景、材料 ---------- */
+const scenes=[
+  {img:'courtyard',alt:'AI 示意：青砖院落与新窗，老人坐在门口',title:'院子还是那个院子，先看窗',text:'想改善漏风，可以先检查窗框、玻璃与安装密封。颜色和分格尽量与院落协调。',plan:'P1',hint:'了解外窗更换'},
+  {img:'winter',alt:'AI 示意：冬日下午的堂屋，老人坐在窗边',title:'冬日的堂屋，想更舒服一点',text:'更换外窗可以改善保温与气密性；实际室温还受供暖、日照和使用习惯影响。',plan:'P1',hint:'了解外窗更换'},
+  {img:'night',alt:'AI 示意：冬夜一家人围坐吃饭',title:'一家人坐下吃顿暖和的饭',text:'围护改造与热泵可以组合考虑。需要同时确认室内末端、供电、运行费用与维护。',plan:'P8',hint:'围护改造＋热泵'},
+  {img:'summer',alt:'AI 示意：学生在夏日葡萄架下写作业',title:'夏天，也想少一点闷热',text:'墙面和屋面保温着眼于围护传热。庭院遮阳与通风也值得讨论，但未计入这套组合的效果。',plan:'P6',hint:'外墙＋屋面'},
+  {img:'solar',alt:'AI 示意：灰瓦屋面上的光伏板',title:'屋顶发电，先看装不装得下',text:'先核对承载、防水、遮挡与街区风貌。发电可供白天用电，夜间需电网或储能；收益要按接入方式核算。',plan:'P9',hint:'围护改造＋光伏'},
+  {img:'insulation',alt:'AI 示意：工人在外墙铺贴保温板',title:'给外墙加保温，先看基层',text:'先检查墙面与潮湿情况，再确定保温、防火和饰面构造。脚手架、进场通道与排期也要谈清楚。',plan:'P2',hint:'了解外墙保温'},
+  {img:'heatpump',alt:'AI 示意：院墙旁的空气源热泵外机',title:'热泵放哪里，也是一道选择题',text:'外机要留出换热、检修空间，并考虑邻里噪声、减振和化霜水排放；机型与末端需要配套设计。',plan:'P11',hint:'外窗＋热泵'}
+];
+function renderEntry(){
+  const costs=plans.map(p=>p.cost),carbons=plans.map(p=>p.carbon),comforts=plans.map(p=>p.comfort);
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+  set('entry-cost-min',Math.min(...costs).toFixed(2));
+  set('entry-cost-max',Math.max(...costs).toFixed(2));
+  set('entry-carbon-min',Math.min(...carbons).toFixed(2));
+  set('entry-carbon-max',Math.max(...carbons).toFixed(2));
+  set('entry-comfort-min','+'+Math.min(...comforts).toFixed(1));
+  set('entry-comfort-max','+'+Math.max(...comforts).toFixed(1));
+}
+function renderScenes(){
+  const grid=document.getElementById('scene-grid');if(!grid)return;
+  grid.innerHTML=scenes.map(s=>{
+    const plan=plans.find(p=>p.id===s.plan);
+    return `<article class="scene-card"><div class="scene-image"><img src="assets/scenes/${s.img}.jpg" alt="${s.alt}" loading="lazy" width="1440" height="960"><span class="image-kind">AI 情景示意</span></div><div class="scene-body"><h3>${s.title}</h3><p>${s.text}</p><div class="scene-foot"><span class="scene-price">${plan?money(plan.cost):'—'}<small>万元 · 组合估算</small></span><button class="scene-link" data-detail="${s.plan}">${s.hint} ${icon('arrow-right')}</button></div></div></article>`;
+  }).join('');
+}
+function renderMaterials(){
+  const grid=document.getElementById('materials-grid');if(!grid)return;
+  grid.innerHTML=Object.entries(materials).map(([key,m])=>`<article class="material-card"><span class="material-icon">${icon(key)}</span><h3>${m.title} · ${m.short}</h3><p class="material-spec">${m.spec}</p><div class="material-facts"><span>排期 <b>${m.duration}</b></span><span>论文估算 <b>${m.price}</b></span></div><p class="material-note">${m.note}</p></article>`).join('');
+}
+const materialLine=p=>p.id==='P13'?'历史做法：真空玻璃窗＋聚苯乙烯保温板＋光伏':p.measures.map(k=>materials[k].short).join(' ＋ ');
+
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let caseFilter='all';
+function caseImage(src,alt,extra=''){
+  return `<div class="case-image"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" ${extra}><span class="image-fallback" aria-hidden="true">原站图片暂未载入<br>可通过下方来源查看实景与图纸</span></div>`;
+}
+function renderCases(){
+  $('#case-filters').innerHTML=caseFilters.map(([id,label])=>`<button data-case-filter="${id}" aria-pressed="${caseFilter===id}" class="${caseFilter===id?'selected':''}">${label}</button>`).join('');
+  const list=cases.filter(c=>caseFilter==='all'||c.categories.includes(caseFilter));
+  $('#case-count').textContent=`${list.length} 个建成案例`;
+  const srcBox=document.getElementById('case-sources');
+  if(srcBox){srcBox.innerHTML='<span>案例原文：</span>'+cases.map(c=>{let host='gooood.cn';try{host=new URL(c.source).hostname.replace(/^www\./,'')}catch{}return `<a href="${c.source}" target="_blank" rel="noopener noreferrer">${c.name}<small>${host} \u2197</small></a>`;}).join('');}
+  $('#case-grid').innerHTML=list.map(c=>`<article class="case-card"><button class="case-cover" data-case="${c.id}" aria-label="查看${c.name}案例">${caseImage(c.cover,c.name+'，建成实景；摄影署名见详情','width="472" height="303"')}<span class="case-built">已建成 · ${c.year}</span><span class="case-cover-cta">看实景与图纸 ${icon('arrow-right')}</span></button><div class="case-body"><p class="case-location">${icon('pin')}${c.location}</p><h3><button data-case="${c.id}">${c.name}</button></h3><p class="case-type">${c.type}</p><p class="case-intro">${c.intro}</p><div class="case-tags">${c.tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="case-card-footer"><button class="text-button" data-case="${c.id}">了解怎么改 ${icon('arrow-right')}</button><a href="${c.source}" target="_blank" rel="noopener noreferrer">来源 · 谷德 ↗</a></div></div></article>`).join('');
+}
+function openCase(id){
+  const c=cases.find(c=>c.id===id);if(!c)return;
+  $('#case-detail-content').innerHTML=`<p class="case-location">${c.location} · ${c.year} 建成</p><h2 id="case-detail-title" class="detail-title">${c.name}</h2><p class="case-type">${c.type}</p><figure class="case-gallery" id="case-gallery">${caseImage(c.cover,c.name+'建成实景')}<figcaption id="case-photo-caption">建成实景 · ${c.credit}</figcaption></figure><div class="case-photo-options" role="group" aria-label="选择案例照片与图纸"><button data-case-photo="${id}" data-photo="-1" aria-pressed="true">建成实景</button>${c.gallery.map((p,i)=>`<button data-case-photo="${id}" data-photo="${i}" aria-pressed="false">${escapeHtml(p.caption.split(/[，,©]/)[0])}</button>`).join('')}</div><dl class="case-facts"><div><dt>设计方</dt><dd>${c.designer}</dd></div><div><dt>建筑面积</dt><dd>${c.area}</dd></div><div><dt>改造造价</dt><dd>公开资料未披露</dd></div><div><dt>实测节能收益</dt><dd>公开资料未披露</dd></div></dl><div class="case-before-after"><section><span>原来的问题</span><h3>改造前</h3><p>${c.before}</p></section><section><span>项目采取的做法</span><h3>改造后</h3><p>${c.after}</p></section></div><section class="case-practice"><h3>具体做了什么</h3>${c.practice.map(([title,text],i)=>`<div><b>0${i+1}</b><p><strong>${title}</strong>${text}</p></div>`).join('')}</section><section class="case-lesson"><h3>对我们改老房，有什么启发？</h3><p>${c.lesson}</p><p class="case-boundary">适用边界：${c.boundary}</p></section><details class="case-evidence"><summary>查看资料完整性与来源</summary><p><b>可查资料：</b>${c.available}。</p><p><b>仍缺数据：</b>${c.missing}。</p><p>根据设计方公开介绍整理，未做独立现场验证。案例未参与住宅方案评分，也不用于推算你家的造价、温升或回收期。</p><p><b>摄影与图纸：</b>${c.credit}。图片由原站提供，权利归原作者。</p><a href="${c.source}" target="_blank" rel="noopener noreferrer">阅读完整原文、照片与图纸 ↗</a><p class="field-note">来源：谷德设计网 · 核对日期 ${c.accessed}</p></details><div class="case-detail-actions"><a class="button outline" href="${c.source}" target="_blank" rel="noopener noreferrer">查看完整项目 ↗</a><button class="button primary" data-case-apply="${c.id}">${c.prompt} ${icon('arrow-right')}</button></div>`;
+  if(!$('#case-dialog').open)$('#case-dialog').showModal();
+}
+function scrollToSection(id){
+  if(currentView!=='configure')switchView('configure');
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 function renderForm(){
   const active=document.activeElement;
   for(const key of ['budget','profile','constraint']){
@@ -93,7 +150,7 @@ function planSketch(p){
 function renderCards(list){
   const fit=list.filter(p=>p.eligible);
   $('#result-caption').textContent=`${fit.length} 种方案符合当前条件${fit.length?'，先看看与你的偏好更接近的 '+Math.min(3,fit.length)+' 种。':'。可以适当调整限制，再看看其他可能。'}`;
-  $('#result-cards').innerHTML=fit.length?fit.slice(0,3).map((p,i)=>`<article class="plan-card ${i===0?'featured':''}"><div class="card-top"><span class="plan-rank">${i===0?icon('leaf'):''}${['更贴近你的偏好','另一种取舍','也值得看看'][i]}</span><span class="plan-id">${p.id}</span></div><div class="plan-visual">${planSketch(p)}</div><h3>${p.name}</h3><p class="plan-subtitle">${p.id==='P13'?'2024年历史参考组合':p.measures.length===1?'从一个部位，开始改善生活':p.measures.length+'项措施组合，兼顾不同需求'}</p><div class="measure-tags">${p.measures.map(k=>`<span>${icon(k)}${measureName(k)}</span>`).join('')}</div><div class="cost-line"><span>估算投入</span><strong>${money(p.cost)}<small> 万元</small></strong></div><div class="plan-metrics"><div><strong>${p.carbon.toFixed(2)}<small> t / 年</small></strong><span>预计减碳</span></div><div><strong>+${p.comfort.toFixed(1)}<small> ℃</small></strong><span>舒适改善参考值</span></div></div><div class="match-row"><span>偏好匹配</span><div class="match-bar"><span style="width:${p.score.toFixed(1)}%"></span></div><b>${Math.round(p.score)}<small>分</small></b></div><div class="card-actions"><button class="button ${i===0?'primary':'outline'}" data-detail="${p.id}">了解这个方案 ${icon('arrow-right')}</button><button class="compare-button ${selected.includes(p.id)?'selected':''}" data-compare="${p.id}" aria-pressed="${selected.includes(p.id)}" aria-label="${selected.includes(p.id)?'移除':'加入'}${p.name}对比">${icon(selected.includes(p.id)?'check':'plus')}</button></div></article>`).join(''):`<div class="empty-state"><div class="empty-icon">${icon('home')}</div><h3>这些条件下，暂时没有合适的组合</h3><p>预算和施工条件仍由你决定。你可以先看看哪些条件影响了选择，再决定是否调整。</p><div class="empty-actions"><button class="button outline" id="relax-budget">暂不限制预算</button><button class="button outline" id="relax-construction">恢复施工条件</button></div></div>`;
+  $('#result-cards').innerHTML=fit.length?fit.slice(0,3).map((p,i)=>`<article class="plan-card ${i===0?'featured':''}"><div class="card-top"><span class="plan-rank">${i===0?icon('leaf'):''}${['更贴近你的偏好','另一种取舍','也值得看看'][i]}</span><span class="plan-id">${p.id}</span></div><div class="plan-visual">${planSketch(p)}</div><h3>${p.name}</h3><p class="plan-subtitle">${p.id==='P13'?'2024年历史参考组合':p.measures.length===1?'从一个部位，开始改善生活':p.measures.length+'项措施组合，兼顾不同需求'}</p><div class="measure-tags">${p.measures.map(k=>`<span>${icon(k)}${measureName(k)}</span>`).join('')}</div><p class="material-line"><b>材料</b>${materialLine(p)}</p><div class="cost-line"><span>估算投入</span><strong>${money(p.cost)}<small> 万元</small></strong></div><div class="plan-metrics"><div><strong>${p.carbon.toFixed(2)}<small> t / 年</small></strong><span>预计减碳</span></div><div><strong>+${p.comfort.toFixed(1)}<small> ℃</small></strong><span>舒适改善参考值</span></div></div><div class="match-row"><span>偏好匹配</span><div class="match-bar"><span style="width:${p.score.toFixed(1)}%"></span></div><b>${Math.round(p.score)}<small>分</small></b></div><div class="card-actions"><button class="button ${i===0?'primary':'outline'}" data-detail="${p.id}">了解这个方案 ${icon('arrow-right')}</button><button class="compare-button ${selected.includes(p.id)?'selected':''}" data-compare="${p.id}" aria-pressed="${selected.includes(p.id)}" aria-label="${selected.includes(p.id)?'移除':'加入'}${p.name}对比">${icon(selected.includes(p.id)?'check':'plus')}</button></div></article>`).join(''):`<div class="empty-state"><div class="empty-icon">${icon('home')}</div><h3>这些条件下，暂时没有合适的组合</h3><p>预算和施工条件仍由你决定。你可以先看看哪些条件影响了选择，再决定是否调整。</p><div class="empty-actions"><button class="button outline" id="relax-budget">暂不限制预算</button><button class="button outline" id="relax-construction">恢复施工条件</button></div></div>`;
   $('#all-plans').hidden=!expanded;
   $('#show-all').innerHTML=(expanded?'收起全部方案':'展开全部13种方案')+' '+icon('chevron-down');
   if(expanded)renderAll(list);
@@ -154,7 +211,7 @@ function briefHtml(p){
 function openDetail(id){
   const p=findScored(id);if(!p)return;
   const e=estimateEconomics(p,settings);
-  $('#detail-content').innerHTML=`<span class="detail-id">${p.id} · ${p.id==='P13'?'历史参考方案':'改造方案'}</span><h2 class="detail-title">${p.name}</h2><p class="plan-subtitle">把措施、投入和需要确认的条件，放在一起了解。</p>${!p.eligible?`<p class="detail-note">当前未通过筛选：${p.reasons.join('；')}</p>`:''}<div class="detail-grid">${[['估算投入',money(p.cost)+' 万元'],['预计年减碳',p.carbon.toFixed(2)+' t'],['舒适改善参考值','+'+p.comfort.toFixed(1)+' ℃'],['偏好匹配',p.score.toFixed(1)+' 分']].map(([k,v])=>`<div class="detail-stat"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div><div class="detail-columns"><div><h3>这套方案，改些什么</h3><ul>${p.measures.map(k=>`<li>${icon(k)}${measureName(k)}</li>`).join('')}</ul><h3>用能与经济参考</h3><p>等价年省电费约 <b>${Math.round(e.annualSavings)} 元</b>，简单回收期约 <b>${e.payback.toFixed(1)} 年</b>。</p><p class="field-note">按论文全电力情景折算；不含维护、折现、更换和补贴，不能替代实际账单分析。</p></div><div><h3>动工之前，先确认</h3><ul class="check-list"><li>住宅的实际面积和现有构造</li><li>外观、屋面及共有部位的改造条件</li>${p.measures.includes('heatpump')?'<li>热泵安装空间、供电与噪声影响</li>':''}${p.measures.includes('solar')?'<li>屋面承载、遮挡和光伏接入条件</li>':''}<li>包含人工、辅材、拆旧的完整报价</li></ul></div></div><div class="detail-note">数据来自论文代表户平均估算。舒适温升、风貌和扰动均为情景指标；匹配分随你的偏好变化。</div><div class="detail-actions"><button class="button outline" data-compare="${p.id}">${icon('compare')}${selected.includes(id)?'移出对比':'加入对比'}</button><button class="button outline" data-download="${p.id}">${icon('download')}下载咨询卡</button><button class="button primary" data-print="${p.id}">${icon('print')}打印 / 存为PDF</button></div>`;
+  $('#detail-content').innerHTML=`<span class="detail-id">${p.id} · ${p.id==='P13'?'历史参考方案':'改造方案'}</span><h2 class="detail-title">${p.name}</h2><p class="plan-subtitle">把措施、投入和需要确认的条件，放在一起了解。</p>${!p.eligible?`<p class="detail-note">当前未通过筛选：${p.reasons.join('；')}</p>`:''}<div class="detail-grid">${[['估算投入',money(p.cost)+' 万元'],['预计年减碳',p.carbon.toFixed(2)+' t'],['舒适改善参考值','+'+p.comfort.toFixed(1)+' ℃'],['偏好匹配',p.score.toFixed(1)+' 分']].map(([k,v])=>`<div class="detail-stat"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div><div class="detail-columns"><div><h3>这套方案，改些什么</h3><ul>${p.measures.map(k=>`<li>${icon(k)}${measureName(k)}</li>`).join('')}</ul><h3>用能与经济参考</h3><p>等价年省电费约 <b>${Math.round(e.annualSavings)} 元</b>，简单回收期约 <b>${e.payback.toFixed(1)} 年</b>。</p><p class="field-note">按论文全电力情景折算；不含维护、折现、更换和补贴，不能替代实际账单分析。</p></div><div><h3>动工之前，先确认</h3><ul class="check-list"><li>住宅的实际面积和现有构造</li><li>外观、屋面及共有部位的改造条件</li>${p.measures.includes('heatpump')?'<li>热泵安装空间、供电与噪声影响</li>':''}${p.measures.includes('solar')?'<li>屋面承载、遮挡和光伏接入条件</li>':''}<li>包含人工、辅材、拆旧的完整报价</li></ul></div></div><section class="detail-materials-block"><h3>可讨论的材料与论文估算单价</h3><table class="detail-materials"><thead><tr><th>部位</th><th>做法与材料</th><th>排期</th><th>论文估算单价</th></tr></thead><tbody>${p.measures.map(k=>{const m=materials[k];const spec=p.id==='P13'?(k==='window'?'历史做法：真空玻璃窗':k==='wall'?'历史做法：聚苯乙烯保温板':m.spec):m.spec;return `<tr><td>${m.title}</td><td>${spec}</td><td>${m.duration}</td><td>${m.price}</td></tr>`;}).join('')}</tbody></table><p class="field-note">单价来自论文表1，未取得本户报价；材料是可讨论做法。实际选材、工程量、工期与费用需现场核定。</p></section><div class="detail-note">数据来自论文代表户平均估算。舒适温升、风貌和扰动均为情景指标；匹配分随你的偏好变化。</div><div class="detail-actions"><button class="button outline" data-compare="${p.id}">${icon('compare')}${selected.includes(id)?'移出对比':'加入对比'}</button><button class="button outline" data-download="${p.id}">${icon('download')}下载咨询卡</button><button class="button primary" data-print="${p.id}">${icon('print')}打印 / 存为PDF</button></div>`;
   if(!$('#detail-dialog').open)$('#detail-dialog').showModal();
 }
 function download(filename,content,type){const url=URL.createObjectURL(new Blob(['\uFEFF',content],{type}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);}
@@ -167,6 +224,25 @@ function exportCsv(ids=plans.map(p=>p.id),name='方案数据'){
 
 document.addEventListener('click',event=>{
   const button=event.target.closest('button,a,[data-detail]');if(!button)return;
+  if(button.dataset.caseFilter){caseFilter=button.dataset.caseFilter;renderCases();document.querySelector(`[data-case-filter="${caseFilter}"]`)?.focus({preventScroll:true});return;}
+  if(button.dataset.case){openCase(button.dataset.case);return;}
+  if(button.dataset.casePhoto){
+    const c=cases.find(c=>c.id===button.dataset.casePhoto);const n=Number(button.dataset.photo);
+    const photo=n===-1?{src:c.cover,caption:'建成实景 · '+c.credit}:c.gallery[n];if(!photo)return;
+    $('#case-gallery').innerHTML=caseImage(photo.src,photo.caption)+`<figcaption>${escapeHtml(photo.caption)}</figcaption>`;
+    document.querySelectorAll('[data-case-photo]').forEach(el=>el.setAttribute('aria-pressed',String(el===button)));return;
+  }
+  if(button.dataset.caseApply){
+    const c=cases.find(c=>c.id===button.dataset.caseApply);if(!c)return;$('#case-dialog').close();
+    if(c.profile){settings.profile=c.profile;settings.weights=null;renderForm();renderDynamic();scrollToSection('workspace');toast('已切换生活偏好；预算和施工条件可继续选择');}
+    else scrollToSection(c.target);return;
+  }
+  if(button.dataset.preset){
+    if(button.dataset.preset==='heritage'){settings.facade='preserve';settings.profile='S3';settings.weights=null;}
+    if(button.dataset.preset==='pending')settings.coordination='pending';
+    if(button.dataset.preset==='quiet'){settings.disturbance='low';settings.profile='S4';settings.weights=null;}
+    renderForm();renderDynamic();scrollToSection('workspace');toast('已应用这项条件，其他选择保持当前设置');return;
+  }
   if(button.dataset.view){switchView(button.dataset.view);return;}
   if(button.dataset.budget){settings.budget=Number(button.dataset.budget);renderForm();renderDynamic();return;}
   if(button.dataset.profile){settings.profile=button.dataset.profile;settings.weights=null;renderForm();renderDynamic();return;}
@@ -182,6 +258,7 @@ document.addEventListener('click',event=>{
     case 'open-compare':switchView('compare');break;
     case 'clear-compare':selected=[];renderDynamic();break;
     case 'close-dialog':$('#detail-dialog').close();break;
+    case 'close-case':$('#case-dialog').close();break;
     case 'relax-budget':settings.budget=99;renderForm();renderDynamic();break;
     case 'relax-construction':constraintDefs.forEach(d=>settings[d.key]=initial[d.key]);renderForm();renderDynamic();break;
     case 'export-data':exportCsv();break;
@@ -196,4 +273,11 @@ document.addEventListener('input',event=>{
 });
 document.addEventListener('keydown',event=>{const el=event.target;if(el.matches('.chart-dot')&&['Enter',' '].includes(event.key)){event.preventDefault();openDetail(el.dataset.detail);}});
 $('#detail-dialog').addEventListener('click',event=>{if(event.target===$('#detail-dialog')){const r=event.target.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)event.target.close();}});
-renderForm();renderDynamic();
+$('#case-dialog').addEventListener('click',event=>{if(event.target===$('#case-dialog')){const r=event.target.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)event.target.close();}});
+document.addEventListener('error',event=>{if(event.target.matches?.('.case-image img')){event.target.parentElement.classList.add('image-failed');event.target.parentElement.querySelector('.image-fallback')?.setAttribute('aria-hidden','false');}},true);
+document.querySelectorAll('.nav-anchor').forEach(a=>a.addEventListener('click',event=>{
+  const target=document.querySelector(a.getAttribute('href'));if(!target)return;
+  if(currentView!=='configure'){event.preventDefault();switchView('configure');setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),90);}
+  else {event.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});}
+}));
+renderForm();renderEntry();renderScenes();renderMaterials();renderCases();renderDynamic();

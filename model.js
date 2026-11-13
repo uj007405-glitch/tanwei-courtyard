@@ -9,6 +9,39 @@ export const measures=Object.freeze({
   heatpump:{name:'空气源热泵',description:'改善采暖制冷设备效率'},
   solar:{name:'屋面光伏',description:'利用屋顶太阳能发电'}
 });
+/** 单价逐项采用论文表1估算；材料为咨询时可讨论的做法，未取得产品和施工报价。 */
+export const materials=Object.freeze({
+  window:{
+    title:'外窗',short:'保温密封外窗',
+    spec:'可比较中空玻璃窗等做法；型材、玻璃与安装密封需成套确认。',
+    duration:'现场排定',price:'520 元/㎡',
+    note:'先查漏风位置与窗洞尺寸，颜色和分格要与街区协调；单价为论文取值。'
+  },
+  wall:{
+    title:'外墙',short:'外墙保温板',
+    spec:'保温材料、固定构造、抗裂层与饰面需配套；厚度与防火等级待设计。',
+    duration:'现场排定',price:'220 元/㎡',
+    note:'先查墙面基层、潮湿和附着条件，再沟通颜色、共有部位与脚手架安排。'
+  },
+  roof:{
+    title:'屋面',short:'屋面保温',
+    spec:'按平屋顶或坡屋顶设计保温、防水和排水构造，不直接套用同一层次。',
+    duration:'现场排定',price:'180 元/㎡',
+    note:'先查老屋面的木基层和檩条，糟朽的要先换；雨季不宜开工。'
+  },
+  heatpump:{
+    title:'热泵',short:'空气源热泵',
+    spec:'空气源热泵与室内末端配套设计；容量取决于房屋热负荷和使用方式。',
+    duration:'现场排定',price:'1.0 万元/户',
+    note:'要确认电容量、外机位置和减振；冬天化霜水要有排放去处。'
+  },
+  solar:{
+    title:'光伏',short:'屋面光伏',
+    spec:'组件、支架与逆变器配套；实际容量由屋面面积、遮挡与接入条件确定。',
+    duration:'现场排定',price:'1.2 万元/户',
+    note:'查屋面荷载、树木遮挡和并网手续；瓦面开孔要做防水。'
+  }
+});
 export const profiles=Object.freeze({
   S1:{name:'省钱优先',weights:[.45,.05,.20,.10,.20]},
   S2:{name:'舒适优先',weights:[.10,.05,.60,.10,.15]},
