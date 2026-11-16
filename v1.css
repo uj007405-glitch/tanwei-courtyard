@@ -261,3 +261,61 @@ button:focus-visible,a:focus-visible{outline:3px solid #c18a4f;outline-offset:4p
   .chip-btn{font-size:13px;padding:7px 11px}
   .viewer-acts{width:100%;justify-content:flex-end}
 }
+
+/* Homepage visual refresh */
+.home-hero{padding:30px 0 26px;text-align:left}
+.home-intro{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:center;min-height:430px}
+.home-copy{padding:30px 0 30px 18px}
+.home-location{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid #dfe8da;border-radius:999px;background:#f0f5ed;color:#477457;font-size:13px}
+.home-location svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6}
+.home-location span{padding-left:7px;border-left:1px solid #d3dfcf;color:#849185}
+.home-copy h1{margin-top:22px;font-size:44px;line-height:1.3;letter-spacing:.3px;font-weight:700}
+.home-copy h1 span{color:var(--brand);position:relative;white-space:nowrap}
+.home-copy h1 span:after{content:"";position:absolute;height:8px;left:0;right:0;bottom:3px;background:#dcebd7;border-radius:6px;z-index:-1}
+.home-copy>p{margin-top:17px;color:#67766c;font-size:16px;line-height:1.9;max-width:450px}
+.home-actions{display:flex;align-items:center;gap:21px;margin-top:25px}
+.home-actions .btn{height:50px;padding:0 24px;font-size:15px}
+.home-actions .btn span{font-size:20px}
+.home-secondary{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#4c6955}
+.home-secondary:hover{color:var(--brand-2)}
+.home-parts{display:flex;align-items:center;gap:12px;margin-top:23px;color:#88958a;font-size:12px}
+.home-parts i{width:3px;height:3px;border-radius:50%;background:#b4c1b2}
+.home-visual{position:relative;margin:0;min-width:0;height:410px;border-radius:22px;overflow:hidden;background:#e7ece3;box-shadow:0 18px 44px rgba(37,57,43,.12)}
+.home-visual:after{content:"";position:absolute;inset:48% 0 0;background:linear-gradient(180deg,transparent,rgba(23,35,27,.54));pointer-events:none}
+.home-visual img{width:100%;height:100%;object-fit:cover;object-position:center 55%;transition:transform .5s ease}
+.home-visual:hover img{transform:scale(1.025)}
+.home-visual figcaption{position:absolute;z-index:1;left:22px;bottom:18px;display:flex;align-items:baseline;gap:10px;color:#fff}
+.home-visual figcaption span{font-size:16px;font-weight:600}
+.home-visual figcaption small{font-size:11px;color:rgba(255,255,255,.78)}
+.home-photo-link{position:absolute;z-index:2;right:18px;bottom:16px;width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.6);border-radius:50%;background:rgba(255,255,255,.16);color:white;backdrop-filter:blur(8px)}
+.home-photo-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7}
+.home-route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:25px;border:1px solid #e5e9e0;border-radius:14px;background:rgba(255,255,255,.72);overflow:hidden}
+.home-route>a{display:flex;align-items:center;gap:12px;padding:16px 18px;min-width:0;transition:background .18s}
+.home-route>a+a{border-left:1px solid #e8ebe4}
+.home-route>a:hover{background:#f1f5ed}
+.route-no{font-size:12px;font-weight:700;color:#739176;background:#edf3e9;border-radius:7px;width:30px;height:30px;display:grid;place-items:center;flex:0 0 auto}
+.home-route>a>div{display:flex;flex-direction:column;min-width:0}
+.home-route b{font-size:13px;font-weight:600;color:#32463a}
+.home-route small{font-size:11px;color:#89948b;margin-top:2px}
+.home-route>a>svg{width:16px;height:16px;fill:none;stroke:#8b9b8c;stroke-width:1.6;margin-left:auto;flex:0 0 auto}
+@media(max-width:900px){
+ .home-intro{grid-template-columns:1fr 1fr;gap:22px;min-height:370px}
+ .home-copy{padding-left:0}.home-copy h1{font-size:36px}
+ .home-visual{height:360px}
+ .home-route>a{padding:14px 12px;gap:9px}
+ .home-route small{font-size:10.5px}
+}
+@media(max-width:640px){
+ .home-hero{padding:22px 0 10px}
+ .home-intro{grid-template-columns:1fr;gap:19px;min-height:0}
+ .home-copy{padding:6px 0 0}
+ .home-copy h1{font-size:32px;margin-top:16px}
+ .home-copy>p{font-size:15px;margin-top:11px}
+ .home-actions{margin-top:19px;gap:17px}
+ .home-parts{margin-top:15px}
+ .home-visual{height:260px;border-radius:16px}
+ .home-route{grid-template-columns:1fr;margin-top:16px}
+ .home-route>a{padding:12px 15px}
+ .home-route>a+a{border-left:0;border-top:1px solid #e8ebe4}
+ .home-route small{font-size:11px}
+}
