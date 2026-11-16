@@ -72,19 +72,19 @@ export const roofOptions = [
 
 export const baseline = { wall: 1.5, window: 4.5, roof: 1.2 };
 
-// 14 户调研住宅的三维模型（由 SketchUp 文件导出并压缩，仅看空间关系，不含装修材质）
+// 10 个可选参考模型；code 保留原始房号，展示编号独立（由 SketchUp 文件导出并压缩，仅看空间关系，不含装修材质）
 export const houseModels = [
 
-  { code: 'h04', name: '1 号房', note: '' },
-  { code: 'h05', name: '2 号房', note: '' },
-  { code: 'h06', name: '3 号房', note: '' },
-  { code: 'h07', name: '4 号房', note: '' },
-  { code: 'h08', name: '5 号房', note: '' },
-  { code: 'h09', name: '6 号房', note: '' },
-  { code: 'h11', name: '7 号房', note: '' },
-  { code: 'h12', name: '8 号房', note: '' },
-  { code: 'h13', name: '9 号房', note: '' },
-  { code: 'h14', name: '10 号房', note: '含四种院落对比' }
+  { code: 'h04', name: '房型 01', note: '' },
+  { code: 'h05', name: '房型 02', note: '' },
+  { code: 'h06', name: '房型 03', note: '' },
+  { code: 'h07', name: '房型 04', note: '' },
+  { code: 'h08', name: '房型 05', note: '' },
+  { code: 'h09', name: '房型 06', note: '' },
+  { code: 'h11', name: '房型 07', note: '' },
+  { code: 'h12', name: '房型 08', note: '' },
+  { code: 'h13', name: '房型 09', note: '' },
+  { code: 'h14', name: '房型 10', note: '含四种院落对比' }
 ];
 export const ratios = { wall: 0.85, window: 0.15, roofPerFloor: 0.9, contingency: 0.12 };
 export const defaults = { area: 120, floors: 2, typeId: 'vernacular', zoneId: 'f2', layoutId: 'court', wallId: 'outer-eps', windowId: 'w2lowe', roofId: 'roof-slope' };

@@ -1,5 +1,5 @@
-import { buildingTypes, facadeZones, layouts, wallOptions, windowOptions, roofOptions, baseline, ratios, defaults, houseModels } from './v1-data.js?v=20261113b';
-import { cases } from './cases.js?v=20261113b';
+import { buildingTypes, facadeZones, layouts, wallOptions, windowOptions, roofOptions, baseline, ratios, defaults, houseModels } from './v1-data.js?v=20261116-selector';
+import { cases } from './cases.js?v=20261116-selector';
 import { caseMedia } from './case-media.js';
 
 const $ = (s) => document.querySelector(s);
@@ -7,7 +7,7 @@ const wan = (n) => (n / 10000).toFixed(2);
 const stars = (n) => '★★★★★'.slice(0, Math.max(1, Math.round(n))) + '☆☆☆☆☆'.slice(0, 5 - Math.max(1, Math.round(n)));
 const money = (n) => Math.round(n).toLocaleString('zh-CN');
 
-const state = { ...defaults };
+const state = { ...defaults, houseCode: null };
 const by = (arr, id) => arr.find((x) => x.id === id);
 
 function allows() {
@@ -114,6 +114,8 @@ function compute() {
 
 function renderResult() {
   const r = compute();
+  const chosen = houseModels.find(h => h.code === state.houseCode);
+  $('#result-house').textContent = chosen ? `参考房型：${chosen.name}` : '参考房型：未选择';
   const t = by(buildingTypes, state.typeId), z = by(facadeZones, state.zoneId), l = by(layouts, state.layoutId);
   $('#total').textContent = wan(r.total);
   $('#per').textContent = `按 ${state.area} ㎡ 算，每平米约 ${money(r.per)} 元（已含 12% 的意外预留）`;
@@ -217,6 +219,14 @@ document.addEventListener('click', (e) => {
   if (b.dataset.roof) { if (b.classList.contains('off')) return; state.roofId = b.dataset.roof; refresh(); return; }
   if (b.dataset.case) { openCase(b.dataset.case); return; }
   if (b.dataset.house) { showHouse(b.dataset.house); return; }
+  if (b.id === 'use-house') {
+    state.houseCode = currentHouse;
+    updateHouseSelection(); renderResult();
+    document.getElementById('step3').scrollIntoView({behavior:'smooth'}); return;
+  }
+  if (b.id === 'clear-house') {
+    state.houseCode = null; updateHouseSelection(); renderResult(); return;
+  }
   if (b.id === 'btn-spin') {
     if (!mvEl) return;
     const on = mvEl.hasAttribute('auto-rotate');
@@ -263,6 +273,7 @@ window.addEventListener('scroll', () => {
 function exportCsv() {
   const r = compute();
   const rows = [['项目', '选的做法', '面积(㎡)', '单价(元/㎡)', '金额(万元)']];
+  rows.push(['参考房型', houseModels.find(h => h.code === state.houseCode)?.name || '未选择', '', '', '']);
   r.items.forEach((i) => rows.push([i.part, i.o.name, Math.round(i.area), i.o.price, wan(i.cost)]));
   rows.push(['小计', '', '', '', wan(r.sub)]);
   rows.push(['意外预留', '', '', '', wan(r.extra)]);
@@ -277,21 +288,23 @@ function exportCsv() {
 
 
 /* ---------- 三维模型 ---------- */
-let mvEl = null, mvScriptLoaded = false, currentHouse = null;
+let mvEl = null, mvPromise = null, currentHouse = null;
 
 function renderHouseChips() {
-  $('#house-chips').innerHTML = houseModels.map((h) => `
-    <button class="chip-btn ${currentHouse === h.code ? 'on' : ''}" data-house="${h.code}">${h.name}</button>`).join('');
+  $('#house-chips').innerHTML = houseModels.map((h,i) => `<button class="chip-btn ${currentHouse===h.code?'on':''}" data-house="${h.code}" aria-pressed="${currentHouse===h.code}"><span>${String(i+1).padStart(2,'0')}</span><b>${h.name}</b><small>${state.houseCode===h.code?'已选用':'查看房型'}</small></button>`).join('');
 }
-
+function updateHouseSelection() {
+  const chosen=houseModels.find(h=>h.code===state.houseCode);
+  $('#house-selection').textContent=chosen ? `已选：${chosen.name}` : '尚未选择房型';
+  renderHouseChips();
+}
 function ensureMVScript(done) {
-  if (mvScriptLoaded) { done(); return; }
-  const s = document.createElement('script');
-  s.type = 'module';
-  s.src = 'assets/lib/model-viewer.min.js';
-  s.onload = () => { mvScriptLoaded = true; done(); };
-  s.onerror = () => { $('#viewerHint').textContent = '三维组件没加载出来，刷新一次试试'; };
-  document.head.appendChild(s);
+  if (!mvPromise) mvPromise=new Promise((resolve,reject)=>{
+    if(customElements.get('model-viewer')) {resolve();return;}
+    const s=document.createElement('script');s.type='module';s.src='assets/lib/model-viewer.min.js';
+    s.onload=()=>customElements.whenDefined('model-viewer').then(resolve);s.onerror=reject;document.head.appendChild(s);
+  });
+  mvPromise.then(done).catch(()=>{$('#viewerHint').textContent='模型加载失败，请刷新重试';mvPromise=null;});
 }
 
 function buildViewer() {
@@ -305,7 +318,7 @@ function buildViewer() {
   mvEl.setAttribute('exposure', '0.95');
   mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
   mvEl.setAttribute('interaction-prompt', 'none');
-  mvEl.addEventListener('load', () => { const h = $('#viewerHint'); if (h) h.style.display = 'none'; });
+  mvEl.addEventListener('load', () => { const h = $('#viewerHint'); if (h) h.style.display = 'none'; $('#use-house').disabled=false; });
   mvEl.addEventListener('error', () => {
     const h = $('#viewerHint');
     if (h) { h.style.display = 'grid'; h.textContent = '这个模型没加载出来，换一个看看'; }
@@ -317,14 +330,18 @@ function showHouse(code) {
   const h = houseModels.find((x) => x.code === code) || houseModels[0];
   currentHouse = h.code;
   renderHouseChips();
-  $('#viewerNote').textContent = h.note ? `${h.name}（${h.note}）· 模型由 SketchUp 文件导出` : `${h.name} · 模型由 SketchUp 文件导出`;
+  $('#preview-name').textContent=h.name;
+  $('#use-house').disabled=true;
+  $('#viewerNote').textContent=h.note || '对照院子的位置、房间围合和屋顶形状。';
   const hint = $('#viewerHint');
   hint.style.display = 'grid';
   hint.textContent = '正在载入' + h.name + '…';
   ensureMVScript(() => {
+    if(currentHouse !== h.code) return;
     buildViewer();
     mvEl.removeAttribute('auto-rotate');
     $('#btn-spin').classList.remove('on');
+    $('#btn-spin').textContent='自动旋转';
     mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
     mvEl.setAttribute('src', `assets/models/${h.code}.glb?v=20261116`);
     mvEl.setAttribute('alt', `${h.name} 的三维模型`);
@@ -337,7 +354,7 @@ function initViewer() {
   if (!section) return;
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.isIntersecting && !currentHouse) { showHouse('h11'); io.disconnect(); }
+      if (e.isIntersecting && !currentHouse) { showHouse(houseModels[0].code); io.disconnect(); }
     });
   }, { rootMargin: '200px' });
   io.observe(section);

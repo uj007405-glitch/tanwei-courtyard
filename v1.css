@@ -218,6 +218,26 @@ dialog::backdrop{background:rgba(20,28,23,.45)}
 }
 
 /* ---- 三维模型 ---- */
+html{scroll-padding-top:90px}
+button:focus-visible,a:focus-visible{outline:3px solid #c18a4f;outline-offset:4px}
+.btn:disabled{opacity:.45;cursor:wait}
+.selected-summary{font-size:14px;color:var(--brand);margin:7px 0}
+.viewer-top{display:flex;gap:14px;align-items:center;padding:9px 8px 20px}
+.viewer-top>span{font-size:12px;letter-spacing:2px;color:var(--sub)}
+.viewer-top strong{font-size:18px}.viewer-top small{margin-left:auto;color:var(--sub)}
+.house-confirm{display:flex;align-items:center;gap:14px;padding:22px;margin-top:18px;border-radius:14px;background:#eef4ec;border:1px solid #dce8d8}
+.house-confirm>div{flex:1}.house-confirm p{font-size:12px;color:var(--sub);margin-top:4px}
+.models .viewer-box{padding:22px;border:1px solid #e0e6dc;box-shadow:0 14px 40px #253f2910}
+.models .viewer-stage{background:radial-gradient(ellipse at 50% 20%,#f2f0e7,#c8d2c2);height:420px}
+.models .viewer-bar{display:block}
+.models .chips-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}
+.models .chip-btn{border-radius:12px;text-align:left;padding:12px 14px;display:grid;grid-template-columns:26px 1fr;gap:1px 8px;align-items:center}
+.models .chip-btn>span{grid-row:span 2;font-size:20px;opacity:.45;font-variant-numeric:tabular-nums}
+.models .chip-btn b{font-size:13px}.models .chip-btn small{font-size:11px;opacity:.7}
+.models .viewer-acts{justify-content:flex-end;margin-top:14px}
+@media(max-width:640px){.models .chips-row{grid-template-columns:repeat(2,1fr)}.house-confirm{flex-wrap:wrap;padding:16px}.house-confirm>div{flex-basis:100%}.viewer-top{flex-wrap:wrap}.viewer-top small{width:100%;margin:0}.models .viewer-box{padding:12px}.models .viewer-stage{height:300px}}
+@media print{.models{display:none!important}}
+
 .models{padding:44px 0}
 .models h2{font-size:24px;text-align:center}
 .models .lead{text-align:center;color:var(--sub);font-size:15px;margin-top:8px}
