@@ -326,7 +326,8 @@ function showHouse(code) {
     mvEl.removeAttribute('auto-rotate');
     $('#btn-spin').classList.remove('on');
     mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
-    mvEl.setAttribute('src', `assets/models/${h.code}.glb`);
+    mvEl.setAttribute('src', `assets/models/${h.code}.glb?v=20261116`);
+    mvEl.setAttribute('alt', `${h.name} 的三维模型`);
   });
 }
 
