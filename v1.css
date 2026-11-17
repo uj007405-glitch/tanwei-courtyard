@@ -243,7 +243,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #c18a4f;outline-offset:4p
 .models .lead{text-align:center;color:var(--sub);font-size:15px;margin-top:8px}
 .viewer-box{margin-top:20px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:14px}
 .viewer-stage{position:relative;height:460px;border-radius:14px;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#c5d1c1 0%,#aebda8 100%);box-shadow:inset 0 -1px 0 #ffffff66}
-.viewer-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
+.viewer-stage model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent;filter:contrast(1.16) brightness(.94)}
 .viewer-stage model-viewer::part(default-interaction-prompt){display:none}
 .viewer-stage model-viewer::part(default-progress-bar){background-color:#d9e2d3}
 .viewer-hint{position:absolute;inset:0;display:grid;place-items:center;font-size:14px;color:#7d8b7d;pointer-events:none}

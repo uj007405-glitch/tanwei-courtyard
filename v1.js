@@ -312,10 +312,10 @@ function buildViewer() {
   mvEl = document.createElement('model-viewer');
   mvEl.setAttribute('camera-controls', '');
   mvEl.setAttribute('touch-action', 'pan-y');
-  mvEl.setAttribute('shadow-intensity', '1');
+  mvEl.setAttribute('shadow-intensity', '1.35');
   mvEl.setAttribute('shadow-softness', '1');
   mvEl.setAttribute('environment-image', 'neutral');
-  mvEl.setAttribute('exposure', '0.95');
+  mvEl.setAttribute('exposure', '0.66');
   mvEl.setAttribute('camera-orbit', '35deg 62deg auto');
   mvEl.setAttribute('interaction-prompt', 'none');
   mvEl.addEventListener('load', () => { const h = $('#viewerHint'); if (h) h.style.display = 'none'; $('#use-house').disabled=false; });
